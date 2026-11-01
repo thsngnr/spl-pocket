@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SPL Pocket – Support</title><link rel="stylesheet" href="style.css"></head>
+<body><main>
+<nav><a href="index.html">SPL Pocket</a><a href="privacy.html">Privacy Policy</a></nav>
+<h1>Support</h1>
+<p>Questions, bug reports and feature requests: <a href="https://github.com/thsngnr/spl-pocket/issues">open an issue on GitHub</a></p>
+
+<h2>Connecting to Splunk</h2>
+<p>SPL Pocket connects directly to the Splunk management port (8089 by default). If your servers are on a private network, connect to your VPN first. Splunk's default self-signed certificate is supported: the app shows the certificate fingerprint and asks you to approve it once.</p>
+
+<h2>Recommended role</h2>
+<p>Create a dedicated role and use a token for its user. Tested capabilities: search, list_health, license_read, list_deployment_server, list_indexer_cluster, list_settings, rest_apps_view, rest_properties_get; searchable indexes *, _internal, _audit, _introspection, _ds*. No edit or delete capabilities are needed. With less access the app tells you where data can't be read.</p>
+
+<h2>Notifications</h2>
+<p>Turn on Settings › Notifications in the app and choose your topics. iOS decides when background checks run (usually a few times a day); your VPN must be connected at that moment. iOS skips checks in Low Power Mode or after you swipe the app away.</p>
+
+<h2>Subscriptions</h2>
+<p>Manage or cancel your subscription in the iOS Settings app › your name › Subscriptions. To restore a purchase on a new device, open the Pro screen in SPL Pocket and tap Restore Purchases.</p>
+
+<p class="muted">Splunk is a trademark of Splunk LLC. SPL Pocket is an independent app and is not affiliated with or endorsed by Splunk.</p>
+</main></body></html>

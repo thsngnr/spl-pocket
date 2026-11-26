@@ -26,6 +26,9 @@ jobs:
           python-version: "3.12"
 
       - name: Build versions.json
+        env:
+          # Yalnızca api.github.com isteklerinde kullanılır (kimliksiz istekler runner'da 403 alıyor).
+          GITHUB_TOKEN: ${{ github.token }}
         run: python3 scripts/build_versions.py versions.json
 
       - name: Commit if changed

@@ -13,6 +13,7 @@ Kullanım: python3 scripts/build_versions.py [çıktı yolu, varsayılan version
 import datetime as dt
 import html as htmllib
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -32,11 +33,21 @@ def fetch(url, accept=None):
         command = ["curl", "-sS", "-L", "--fail", "--max-time", "60", "-A", UA]
         if accept:
             command += ["-H", f"Accept: {accept}"]
-        result = subprocess.run(command + [url], capture_output=True, check=False)
+        # Runner'da GitHub API kimliksiz isteklere 403 veriyor; workflow'un token'ı yalnızca api.github.com'a gider.
+        # Token komut satırında görünmesin diye başlık curl'e stdin'den (-H @-) verilir.
+        token = os.environ.get("GITHUB_TOKEN") if url.startswith("https://api.github.com/") else None
+        stdin = None
+        if token:
+            command += ["-H", "@-"]
+            stdin = f"Authorization: Bearer {token}\n".encode()
+        result = subprocess.run(command + [url], input=stdin, capture_output=True, check=False)
         if result.returncode != 0:
             raise RuntimeError(f"curl {result.returncode} for {url}: {result.stderr.decode(errors='replace').strip()}")
         return result.stdout.decode("utf-8", "replace")
-    req = urllib.request.Request(url, headers={"User-Agent": UA, **({"Accept": accept} if accept else {})})
+    headers = {"User-Agent": UA, **({"Accept": accept} if accept else {})}
+    if url.startswith("https://api.github.com/") and os.environ.get("GITHUB_TOKEN"):
+        headers["Authorization"] = f"Bearer {os.environ['GITHUB_TOKEN']}"
+    req = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(req, timeout=60) as resp:
         if resp.status != 200:
             raise RuntimeError(f"HTTP {resp.status} for {url}")

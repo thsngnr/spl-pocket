@@ -289,7 +289,8 @@ def main():
     if errors:
         ordered["errors"] = errors
     with open(path, "w", encoding="utf-8") as f:
-        json.dump(ordered, f, ensure_ascii=False, indent=1)
+        # Küçültülmüş: uygulama her kontrolde indiriyor (GitHub Pages ayrıca gzip ile sunar).
+        json.dump(ordered, f, ensure_ascii=False, separators=(",", ":"))
         f.write("\n")
     counts = ", ".join(f"{k}={len(v)}" for k, v in products.items())
     print(f"versions.json: {counts}, advisories={len(advs)}, errors={errors or 'none'}")
